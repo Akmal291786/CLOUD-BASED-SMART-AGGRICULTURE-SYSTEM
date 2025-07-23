@@ -1,0 +1,296 @@
+/*AKMAL AHMAD KHAN */
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Agriculture Monitoring</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eef6f1;
+      color: #2f4f2f;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+      background-color: #a3d9a5;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    }
+    header img {
+      height: 60px;
+    }
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #1a3c1a;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .hero {
+      background-image: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1650&q=80');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-shadow: 0 0 6px #000;
+    }
+    .cta-bar {
+      background-color: #4a9148;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 1.3rem;
+    }
+    .content {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .input-section {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .input-section input {
+      width: 50px;
+      font-size: 1.2rem;
+      padding: 5px;
+      border-radius: 4px;
+      border: 2px solid #4a9148;
+      text-align: center;
+    }
+    .input-section button {
+      background-color: #4a9148;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      margin-left: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      transition: background-color 0.3s;
+    }
+    .input-section button:hover {
+      background-color: #3b7438;
+    }
+    .results {
+      margin-top: 20px;
+    }
+    .field-analysis {
+      background-color: #dff0d8;
+      border-left: 6px solid #4a9148;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      font-size: 1rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    #chartContainer {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .footer {
+      background-color: #a3d9a5;
+      padding: 30px 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      color: #1a3c1a;
+      font-size: 0.9rem;
+    }
+    .footer-column {
+      width: 20%;
+      min-width: 150px;
+      margin-bottom: 15px;
+    }
+    .footer-column h4 {
+      margin-bottom: 10px;
+      color: #164916;
+    }
+    .footer-column p, .footer-column a {
+      color: #225522;
+      text-decoration: none;
+    }
+    .footer-logo {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #164916;
+      width: 100%;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Africa_Grant_Advisors_logo.png/320px-Africa_Grant_Advisors_logo.png" alt="Logo" />
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">Data</a>
+      <a href="#">Support</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    स्मार्ट कृषि निगरानी प्रणाली
+  </div>
+
+  <div class="cta-bar">
+    हम आपकी मदद करते हैं <span>कृषि में सुधार लाने में</span>।
+  </div>
+
+  <div class="content">
+    <div class="input-section">
+      <label for="fieldCount">कितने खेत मॉनिटर करना है? </label>
+      <input type="number" id="fieldCount" min="1" max="10" value="3" />
+      <button onclick="generateData()">डेटा जनरेट करें</button>
+    </div>
+
+    <div class="results" id="results">
+      <!-- Field analysis output will appear here -->
+    </div>
+
+    <div id="chartContainer">
+      <canvas id="fieldChart" width="800" height="400"></canvas>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-column">
+      <h4>हमारे बारे में</h4>
+      <p>स्मार्ट कृषि समाधान</p>
+      <p>स्थायी खेती के लिए समर्पित</p>
+    </div>
+    <div class="footer-column">
+      <h4>सेवाएं</h4>
+      <p>डेटा निगरानी</p>
+      <p>फसल सलाह</p>
+    </div>
+    <div class="footer-column">
+      <h4>ग्राहक</h4>
+      <p>सरकारी और निजी</p>
+      <p>एनजीओ सहयोगी</p>
+    </div>
+    <div class="footer-column">
+      <h4>संपर्क करें</h4>
+      <p>कर्नाटक, भारत</p>
+      <p>contact@smartagri.com</p>
+    </div>
+    <div class="footer-logo">
+      Smart Agriculture Monitoring © 2025
+    </div>
+  </div>
+
+  <script>
+    const DRY_THRESHOLD = 30.0;
+    const WET_THRESHOLD = 70.0;
+    const TEMP_HIGH = 35.0;
+    const TEMP_LOW = 10.0;
+    const HUMIDITY_LOW = 40.0;
+
+    function analyzeField(id, soil_moisture, temperature, humidity) {
+      let result = खेत ${id} विश्लेषण:\n;
+      result += `  मिट्टी की नमी: ${soil_moisture}%\n`;
+      result += `  तापमान: ${temperature}°C\n`;
+      result += `  आर्द्रता: ${humidity}%\n\n`;
+
+      if (soil_moisture < DRY_THRESHOLD) {
+        result += "  सलाह: सिंचाई आवश्यक है। मिट्टी बहुत सूखी है।\n";
+      } else if (soil_moisture > WET_THRESHOLD) {
+        result += "  सलाह: सिंचाई की आवश्यकता नहीं। मिट्टी बहुत गीली है।\n";
+      } else {
+        result += "  सलाह: मिट्टी की नमी उपयुक्त है।\n";
+      }
+
+      if (temperature > TEMP_HIGH) {
+        result += "  चेतावनी: उच्च तापमान! फसलों को छाया दें।\n";
+      } else if (temperature < TEMP_LOW) {
+        result += "  चेतावनी: कम तापमान! गर्माहट के उपाय करें।\n";
+      }
+
+      if (humidity < HUMIDITY_LOW) {
+        result += "  चेतावनी: कम आर्द्रता! मिस्टिंग करें।\n";
+      } else {
+        result += "  आर्द्रता स्तर सामान्य है।\n";
+      }
+
+      return result;
+    }
+
+    function generateData() {
+      const fieldCount = parseInt(document.getElementById('fieldCount').value) || 3;
+
+      fetch(/generate-data/${fieldCount})
+        .then(res => res.json())
+        .then(data => {
+          const resultsDiv = document.getElementById('results');
+          resultsDiv.innerHTML = '';
+          data.forEach((field, i) => {
+            const analysis = analyzeField(i + 1, field.soil_moisture, field.temperature, field.humidity);
+            const div = document.createElement('div');
+            div.classList.add('field-analysis');
+            div.textContent = analysis;
+            resultsDiv.appendChild(div);
+          });
+
+          const ctx = document.getElementById('fieldChart').getContext('2d');
+          if (window.myChart) {
+            window.myChart.destroy();
+          }
+
+          window.myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: data.map((_, i) => खेत ${i + 1}),
+              datasets: [
+                {
+                  label: 'मिट्टी की नमी (%)',
+                  data: data.map(d => d.soil_moisture),
+                  backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                },
+                {
+                  label: 'तापमान (°C)',
+                  data: data.map(d => d.temperature),
+                  backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                },
+                {
+                  label: 'आर्द्रता (%)',
+                  data: data.map(d => d.humidity),
+                  backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        });
+    }
+
+    window.onload = generateData;
+  </script>
+</body>
+</html>
